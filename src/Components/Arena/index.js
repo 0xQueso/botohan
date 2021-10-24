@@ -7,7 +7,7 @@ import './Arena.css';
 /*
  * We pass in our characterNFT metadata so we can a cool card in our UI
  */
-const Arena = ({ characterNFT }) => {
+const Arena = ({ characterNFT, setCharacterNFT }) => {
     // State
     const [gameContract, setGameContract] = useState(null);
     const [boss, setBoss] = useState(null);
@@ -29,6 +29,7 @@ const Arena = ({ characterNFT }) => {
         }
     };
 
+
     useEffect(() => {
         const fetchBoss = async () => {
             const bossTxn = await gameContract.getBigBoss();
@@ -36,8 +37,29 @@ const Arena = ({ characterNFT }) => {
             setBoss(transformCharacterData(bossTxn));
         };
 
+        const onAttackComplete = (newBossHp, newPlayerHp) => {
+            const bossHp = newBossHp.toNumber();
+            const playerHp = newPlayerHp.toNumber();
+
+            console.log(`AttackComplete: Boss Hp: ${bossHp} Player Hp: ${playerHp}`);
+
+            setBoss((prevState) => {
+                return { ...prevState, hp: bossHp };
+            });
+
+            setCharacterNFT((prevState) => {
+                return { ...prevState, hp: playerHp };
+            });
+        };
         if (gameContract) {
             fetchBoss();
+            gameContract.on('AttackComplete', onAttackComplete);
+        }
+
+        return () => {
+            if (gameContract) {
+                gameContract.off('AttackComplete', onAttackComplete);
+            }
         }
     }, [gameContract]);
 
@@ -65,7 +87,7 @@ const Arena = ({ characterNFT }) => {
             {/* Boss */}
             {boss && (
                 <div className="boss-container">
-                    <div className={`boss-content`}>
+                    <div className={`boss-content ${attackState}`}>
                         <h2>🔥 {boss.name} 🔥</h2>
                         <div className="image-content">
                             <img src={boss.imageURI} alt={`Boss ${boss.name}`} />

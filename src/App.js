@@ -41,7 +41,7 @@ const App = () => {
     } else if (currentAccount && !characterNFT) {
       return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
     } else if (currentAccount && characterNFT) {
-      return <Arena characterNFT={characterNFT} />;
+      return <Arena characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
     }
   };
 
@@ -106,7 +106,7 @@ const App = () => {
           abi,
           signer
       );
-      const txn = await gameContract.checkIfUserHasNFT;
+      const txn = await gameContract.checkIfUserHasNFT();
 
       if (txn.name) {
         console.log('User has character NFT');
