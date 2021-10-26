@@ -1,4 +1,4 @@
-### **Welcome 👋**=
+### **Welcome 👋**
 Botohan. 
 
 An on-chain attack based game. 
