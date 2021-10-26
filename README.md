@@ -8,4 +8,4 @@ The test version of this can be found at [botohan.vercel.app/](https://botohan.v
 1. Run `npm install` at the root of your directory
 2. Run `npm run start` to start the project
 
-#### from course buildspace NFT Game Project
+#### buildspace NFT Game Project
